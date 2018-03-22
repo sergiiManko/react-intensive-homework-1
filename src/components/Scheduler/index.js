@@ -6,34 +6,42 @@ import Style from './styles.scss';
 
 //Instrumental
 import Task from '../Task/';
+import { getUniqueID } from '../helpers';
 
 export default class Scheduler extends Component {
     state = {
-        message: '',
+        taskText: '',
+        tasks:    [],
     };
 
     _onSchedulerType = ({ target: { value }}) => {
         if (value.length <= 10) {
             this.setState({
-                message: value,
+                taskText: value,
             });
         }
     };
 
-    _sendScheduler = (e) => {
+    _sendTask = (e, taskText) => {
         e.preventDefault();
-        const { message } = this.state;
 
-        if (message) {
-            this.setState({
-                message: '',
-            });
+        if (this.state.taskText) {
+            this.setState(({ tasks }) => ({
+                tasks: [{ id: getUniqueID(), taskText }, ...tasks],
+            }));
         }
     };
 
 
     render () {
-        const { message } = this.state;
+        const { tasks: tasksData, taskText } = this.state;
+
+        const tasks = tasksData.map((task) => (
+            <Task
+                key = { task.id }
+                taskText = { task.taskText }
+            />
+        ));
 
         return (
             <div className = { Style.scheduler }>
@@ -43,24 +51,14 @@ export default class Scheduler extends Component {
                         <input placeholder = 'Поиск...' type = 'text' />
                     </header>
                     <section>
-                        <form onSubmit = { this._sendScheduler }>
-                            <input placeholder = 'Описание моей новой задачи' type = 'text' onChange = { this._onSchedulerType } value = { message } />
-                            <button>Добавить задачу</button>
+                        <form onSubmit = { this._sendTask }>
+                            <input placeholder = 'Описание моей новой задачи' type = 'text' value = { taskText } onChange = { this._onSchedulerType } />
+                            <button type = 'Send'>Добавить задачу</button>
                         </form>
                         <ul>
-                            <Task />
-                            <Task />
-                            <Task />
-                            <Task />
-                            <Task />
+                            { tasks }
                         </ul>
                     </section>
-                    <footer>
-                        <span>
-                            +
-                        </span>
-                        <code>code</code>
-                    </footer>
                 </main>
             </div>
         );
