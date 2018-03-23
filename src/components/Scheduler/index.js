@@ -22,8 +22,9 @@ export default class Scheduler extends Component {
         }
     };
 
-    _sendTask = (e, taskText) => {
+    _sendTask = (e) => {
         e.preventDefault();
+        const { taskText } = this.state;
 
         if (this.state.taskText) {
             this.setState(({ tasks }) => ({
