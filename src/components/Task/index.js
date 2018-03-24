@@ -69,9 +69,9 @@ export default class Task extends Component {
     };
 
     _handleInputKeyPress = (e) => {
-        const { oldText } = this.state;
+        const { oldText, readOnly } = this.state;
 
-        if (e.keyCode === 27) {
+        if (e.keyCode === 27 && !readOnly) {
             this._handleEdit();
             this.setState({
                 text: oldText,
