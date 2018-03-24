@@ -15,14 +15,14 @@ export default class Task extends Component {
     static propTypes = {
         isFavorite:  bool.isRequired,
         setFavorite: func.isRequired,
+        sort:        func.isRequired,
         taskText:    string.isRequired,
-        onSort:      func.isRequired,
     };
 
     componentDidMount () {
-        const { onSort } = this.props;
+        const { sort } = this.props;
 
-        onSort();
+        sort();
     }
 
     state = {

@@ -65,7 +65,7 @@ export default class Scheduler extends Component {
             <Task
                 key = { task.id }
                 setFavorite = { this._setFavorite }
-                onSort = { this.sort }
+                sort = { this.sort }
                 { ...task }
             />
         ));
