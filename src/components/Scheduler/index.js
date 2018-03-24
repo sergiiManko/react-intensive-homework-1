@@ -15,7 +15,7 @@ export default class Scheduler extends Component {
     };
 
     _onSchedulerType = ({ target: { value }}) => {
-        if (value.length <= 10) {
+        if (value.length <= 46) {
             this.setState({
                 taskText: value,
             });
@@ -28,7 +28,8 @@ export default class Scheduler extends Component {
 
         if (this.state.taskText) {
             this.setState(({ tasks }) => ({
-                tasks: [{ id: getUniqueID(), taskText }, ...tasks],
+                taskText: '',
+                tasks:    [{ id: getUniqueID(), taskText }, ...tasks],
             }));
         }
     };
@@ -36,7 +37,6 @@ export default class Scheduler extends Component {
 
     render () {
         const { tasks: tasksData, taskText } = this.state;
-
         const tasks = tasksData.map((task) => (
             <Task
                 key = { task.id }
