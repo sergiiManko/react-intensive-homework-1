@@ -16,13 +16,13 @@ export default class Task extends Component {
         isFavorite:  bool.isRequired,
         setFavorite: func.isRequired,
         taskText:    string.isRequired,
-        onSort: func.isRequired
+        onSort:      func.isRequired,
     };
 
-    componentDidMount() {
-        const { onSort } = this.props
+    componentDidMount () {
+        const { onSort } = this.props;
 
-        onSort()
+        onSort();
     }
 
     state = {

@@ -9,7 +9,6 @@ import Task from '../Task/';
 
 export default class Scheduler extends Component {
     state = {
-        favorite: false,
         taskText: '',
         tasks:    [],
     };
@@ -49,23 +48,14 @@ export default class Scheduler extends Component {
     };
 
     sort = () => {
-        const { tasks, favorite } = this.state;
+        const { tasks } = this.state;
 
-        if (favorite === false) {
-            this.setState({
-                favorite: true
-            })
-        } else {
-            this.setState({
-                favorite: false
-            })
-        }
-
-        tasks.sort((a, b) => {
+        this.setState(tasks.sort((a, b) => {
             if (a.isFavorite < b.isFavorite) {
                 return +1;
             }
-        });
+        }));
+
     };
 
 
