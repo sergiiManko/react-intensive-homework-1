@@ -5,6 +5,11 @@ import { string } from 'prop-types';
 //Style
 import Style from './styles.scss';
 
+//Instrumental
+import Checkbox from '../../theme/assets/Checkbox';
+import DeleteIcon from '../../theme/assets/Delete';
+import EditIcon from '../../theme/assets/Edit';
+import StartIcon from '../../theme/assets/Star';
 
 export default class Task extends Component {
     static propTypes = {
@@ -17,15 +22,16 @@ export default class Task extends Component {
         return (
             <li className = { Style.task }>
                 <div>
-                    <span>
-                        +
-                    </span>
+                    <Checkbox
+                        color1 = '#3b8ef3'
+                        color2 = '#fff'
+                    />
                     <input type = ' text' value = { taskText } />
                 </div>
                 <div>
-                    <span>1</span>
-                    <span>2</span>
-                    <span>3</span>
+                    <StartIcon color1 = '#3b8ef3' />
+                    <EditIcon color1 = '#3b8ef3' />
+                    <DeleteIcon color1 = '#3b8ef3' />
                 </div>
             </li>
         );
