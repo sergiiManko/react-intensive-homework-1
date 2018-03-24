@@ -19,8 +19,8 @@ export default class Task extends Component {
 
     state = {
         isFavorite: false,
-        isEdit:     false,
-        isDone:     false,
+        notEdit:    true,
+        isDone:     false
     };
 
     _handleFavorite = () => {
@@ -39,9 +39,21 @@ export default class Task extends Component {
             : this.setState({ isDone: true });
     };
 
+    _handleEdit = () => {
+        const { notEdit } = this.state;
+
+        notEdit === true
+            ? this.setState({ notEdit: false })
+            : this.setState({ notEdit: true });
+    }
+
+    _inputType = (event) => {
+        this.setState({ value: event.target.value });
+    }
+
     render () {
         const { taskText } = this.props;
-        const { isFavorite, isDone } = this.state;
+        const { isFavorite, isDone, notEdit, value } = this.state;
         let className;
 
         isDone === true
@@ -57,7 +69,12 @@ export default class Task extends Component {
                         color2 = '#fff'
                         onClick = { this._handleDone }
                     />
-                    <input type = ' text' value = { taskText } />
+                    <input
+                        type = 'text'
+                        value = { value ? value : taskText }
+                        readOnly = { notEdit }
+                        onChange = { this._inputType }
+                    />
                 </div>
                 <div>
                     <StartIcon
@@ -65,7 +82,10 @@ export default class Task extends Component {
                         color1 = '#3b8ef3'
                         onClick = { this._handleFavorite }
                     />
-                    <EditIcon color1 = '#3b8ef3' />
+                    <EditIcon
+                        onClick = { this._handleEdit }
+                        color1 = '#3b8ef3'
+                    />
                     <DeleteIcon color1 = '#3b8ef3' />
                 </div>
             </li>
