@@ -6,7 +6,6 @@ import Style from './styles.scss';
 
 //Instrumental
 import Task from '../Task/';
-import { getUniqueID } from '../helpers';
 
 export default class Scheduler extends Component {
     state = {
@@ -15,11 +14,9 @@ export default class Scheduler extends Component {
     };
 
     _onSchedulerType = ({ target: { value }}) => {
-        if (value.length <= 46) {
-            this.setState({
-                taskText: value,
-            });
-        }
+        this.setState({
+            taskText: value,
+        });
     };
 
     _sendTask = (e) => {
@@ -28,8 +25,8 @@ export default class Scheduler extends Component {
 
         if (this.state.taskText) {
             this.setState(({ tasks }) => ({
-                taskText: '',
-                tasks:    [{ id: getUniqueID(), taskText }, ...tasks],
+                taskText:   '',
+                tasks:      [{ id: Math.random(), taskText }, ...tasks],
             }));
         }
     };
