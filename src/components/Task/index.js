@@ -26,8 +26,9 @@ export default class Task extends Component {
     }
 
     state = {
-        edit: true,
-        done: false,
+        newText:  '',
+        readOnly: true,
+        done:     false,
     };
 
     _handleFavorite = () => {
@@ -41,27 +42,45 @@ export default class Task extends Component {
 
         done === true
             ? this.setState({ done: false })
-            : this.setState({ done: true });
+            : this.setState({ done: true, readOnly: true });
     };
 
     _handleEdit = () => {
-        const { edit } = this.state;
+        const { readOnly, done } = this.state;
 
-        edit === true
-            ? this.setState({ edit: false })
-            : this.setState({ edit: true });
+        readOnly === true && done !== true
+            ? this.setState({ readOnly: false })
+            : this.setState({ readOnly: true });
     };
 
-    _inputType = (event) => {
-        this.setState({ value: event.target.value });
+    _handleInputType = (e) => {
+        const { value } = e.target;
+
+        if (value.length <= 46) {
+            this.setState({ newText: value });
+        }
     };
+
+    _handleInputKeyPress = (e) => {
+        const { taskText } = this.props;
+
+        if (e.keyCode === 27) {
+            this._handleEdit();
+            this.setState({
+                newText: taskText,
+            });
+        }
+
+        console.log(this.state);
+    };
+
 
     render () {
         let className;
         const firstColor = '#3b8ef3';
 
         const { taskText, isFavorite } = this.props;
-        const { done, edit, value } = this.state;
+        const { done, readOnly, newText } = this.state;
 
         done === true
             ? className = `${Style.task} ${Style.completed}`
@@ -77,10 +96,11 @@ export default class Task extends Component {
                         onClick = { this._handleDone }
                     />
                     <input
-                        readOnly = { edit }
+                        readOnly = { readOnly }
                         type = 'text'
-                        value = { value ? value : taskText }
-                        onChange = { this._inputType }
+                        value = { newText ? newText : taskText }
+                        onChange = { this._handleInputType }
+                        onKeyDown = { this._handleInputKeyPress }
                     />
                 </div>
                 <div>
