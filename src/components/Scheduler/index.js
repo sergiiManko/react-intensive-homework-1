@@ -51,9 +51,7 @@ export default class Scheduler extends Component {
         const { tasks } = this.state;
 
         this.setState(tasks.sort((a, b) => {
-            if (a.isFavorite < b.isFavorite) {
-                return +1;
-            }
+            return a.isFavorite < b.isFavorite;
         }));
 
     };
