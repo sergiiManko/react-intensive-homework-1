@@ -1,6 +1,6 @@
 //Core
 import React, { Component } from 'react';
-import { string } from 'prop-types';
+import { string, func, bool } from 'prop-types';
 
 //Style
 import Style from './styles.scss';
@@ -12,51 +12,57 @@ import EditIcon from '../../theme/assets/Edit';
 import StartIcon from '../../theme/assets/Star';
 
 export default class Task extends Component {
-
     static propTypes = {
-        taskText: string.isRequired,
+        isFavorite: bool.isRequired,
+        sortTask:   func.isRequired,
+        taskText:   string.isRequired,
     };
 
     state = {
-        isFavorite: false,
-        notEdit:    true,
-        isDone:     false
+        checked: false,
+        edit:    true,
+        done:    false,
     };
 
     _handleFavorite = () => {
-        const { isFavorite } = this.state;
+        const { sortTask, id } = this.props;
+        const { checked } = this.state;
 
-        isFavorite === true
-            ? this.setState({ isFavorite: false })
-            : this.setState({ isFavorite: true });
+        sortTask(id);
+
+        checked === true
+            ? this.setState({ checked: false })
+            : this.setState({ checked: true });
     };
 
     _handleDone = () => {
-        const { isDone } = this.state;
+        const { done } = this.state;
 
-        isDone === true
-            ? this.setState({ isDone: false })
-            : this.setState({ isDone: true });
+        done === true
+            ? this.setState({ done: false })
+            : this.setState({ done: true });
     };
 
     _handleEdit = () => {
-        const { notEdit } = this.state;
+        const { edit } = this.state;
 
-        notEdit === true
-            ? this.setState({ notEdit: false })
-            : this.setState({ notEdit: true });
-    }
+        edit === true
+            ? this.setState({ edit: false })
+            : this.setState({ edit: true });
+    };
 
     _inputType = (event) => {
         this.setState({ value: event.target.value });
-    }
+    };
 
     render () {
-        const { taskText } = this.props;
-        const { isFavorite, isDone, notEdit, value } = this.state;
         let className;
+        const firstColor = '#3b8ef3';
 
-        isDone === true
+        const { taskText } = this.props;
+        const { done, edit, checked, value } = this.state;
+
+        done === true
             ? className = `${Style.task} ${Style.completed}`
             : className = `${Style.task}`;
 
@@ -64,29 +70,29 @@ export default class Task extends Component {
             <li className = { className }>
                 <div>
                     <Checkbox
-                        checked = { isDone }
-                        color1 = '#3b8ef3'
+                        checked = { done }
+                        color1 = { firstColor }
                         color2 = '#fff'
                         onClick = { this._handleDone }
                     />
                     <input
+                        readOnly = { edit }
                         type = 'text'
                         value = { value ? value : taskText }
-                        readOnly = { notEdit }
                         onChange = { this._inputType }
                     />
                 </div>
                 <div>
                     <StartIcon
-                        checked = { isFavorite }
-                        color1 = '#3b8ef3'
+                        checked = { checked }
+                        color1 = { firstColor }
                         onClick = { this._handleFavorite }
                     />
                     <EditIcon
+                        color1 = { firstColor }
                         onClick = { this._handleEdit }
-                        color1 = '#3b8ef3'
                     />
-                    <DeleteIcon color1 = '#3b8ef3' />
+                    <DeleteIcon color1 = { firstColor } />
                 </div>
             </li>
         );

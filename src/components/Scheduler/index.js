@@ -9,6 +9,7 @@ import Task from '../Task/';
 
 export default class Scheduler extends Component {
     state = {
+        favorite: false,
         taskText: '',
         tasks:    [],
     };
@@ -25,19 +26,30 @@ export default class Scheduler extends Component {
 
         if (this.state.taskText) {
             this.setState(({ tasks }) => ({
-                taskText:   '',
-                tasks:      [{ id: Math.random(), taskText }, ...tasks],
+                taskText: '',
+                tasks:    [{ id: Math.random(), taskText, isFavorite: false }, ...tasks],
             }));
         }
     };
 
+    _sortTask = (id) => {
+        const { tasks } = this.state;
+
+
+        tasks.map((task) => {
+            if (task.id == id) {
+                task.isFavorite = true;
+            }
+        });
+    };
 
     render () {
         const { tasks: tasksData, taskText } = this.state;
         const tasks = tasksData.map((task) => (
             <Task
                 key = { task.id }
-                taskText = { task.taskText }
+                sortTask = { this._sortTask }
+                { ...task }
             />
         ));
 
