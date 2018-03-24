@@ -34,7 +34,7 @@ export default class Scheduler extends Component {
         }
     };
 
-    _sortTask = (id) => {
+    _setFavorite = (id) => {
         const { tasks } = this.state;
 
         tasks.map((task) => {
@@ -45,14 +45,26 @@ export default class Scheduler extends Component {
             }
         });
 
+        this.sort();
+    };
+
+    sort = () => {
+        const { tasks, favorite } = this.state;
+
+        if (favorite === false) {
+            this.setState({
+                favorite: true
+            })
+        } else {
+            this.setState({
+                favorite: false
+            })
+        }
+
         tasks.sort((a, b) => {
             if (a.isFavorite < b.isFavorite) {
                 return +1;
             }
-        });
-
-        this.setState({
-            tasks,
         });
     };
 
@@ -62,7 +74,8 @@ export default class Scheduler extends Component {
         const tasks = tasksData.map((task) => (
             <Task
                 key = { task.id }
-                sortTask = { this._sortTask }
+                setFavorite = { this._setFavorite }
+                onSort = { this.sort }
                 { ...task }
             />
         ));

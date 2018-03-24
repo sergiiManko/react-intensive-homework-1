@@ -13,10 +13,17 @@ import StartIcon from '../../theme/assets/Star';
 
 export default class Task extends Component {
     static propTypes = {
-        isFavorite: bool.isRequired,
-        sortTask:   func.isRequired,
-        taskText:   string.isRequired,
+        isFavorite:  bool.isRequired,
+        setFavorite: func.isRequired,
+        taskText:    string.isRequired,
+        onSort: func.isRequired
     };
+
+    componentDidMount() {
+        const { onSort } = this.props
+
+        onSort()
+    }
 
     state = {
         edit: true,
@@ -24,9 +31,9 @@ export default class Task extends Component {
     };
 
     _handleFavorite = () => {
-        const { sortTask, id } = this.props;
+        const { setFavorite, id } = this.props;
 
-        sortTask(id);
+        setFavorite(id);
     };
 
     _handleDone = () => {
