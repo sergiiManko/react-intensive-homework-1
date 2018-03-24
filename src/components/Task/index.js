@@ -23,10 +23,7 @@ export default class Task extends Component {
         const { sort, taskText } = this.props;
 
         sort();
-
-        this.setState({
-            text: taskText,
-        });
+        this.setState({ text: taskText });
     }
 
     state = {
@@ -44,7 +41,7 @@ export default class Task extends Component {
     _handleDone = () => {
         const { done } = this.state;
 
-        done === true
+        done
             ? this.setState({ done: false })
             : this.setState({ done: true, readOnly: true });
     };
@@ -52,12 +49,9 @@ export default class Task extends Component {
     _handleEdit = () => {
         const { readOnly, done, text } = this.state;
 
-        this.setState({
-            oldText: text,
-        });
-        readOnly === true && done !== true
-            ? this.setState({ readOnly: false })
-            : this.setState({ readOnly: true });
+        readOnly && !done
+            ? this.setState({ readOnly: false, oldText: text })
+            : this.setState({ readOnly: true, oldText: text });
     };
 
     _handleInputType = (e) => {
