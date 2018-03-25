@@ -23,12 +23,6 @@ export default class Task extends Component {
         updateText:      func.isRequired,
     };
 
-    componentWillUpdate () {
-        const { localStorageApi } = this.props;
-
-        localStorageApi();
-    }
-
     static contextTypes = {
         firstColor:  string.isRequired,
         secondColor: string.isRequired,
@@ -39,6 +33,19 @@ export default class Task extends Component {
         done:     false,
         newText:  '',
     };
+
+    componentDidMount () { //Чувствую что можно сделать этот момент лучше, но пока не придумал как)
+        const { taskText } = this.props;
+        this.setState({
+            newText: taskText,
+        });
+    }
+
+    componentWillUpdate () {
+        const { localStorageApi } = this.props;
+
+        localStorageApi();
+    }
 
     _handleFavorite = () => {
         const { setFavorite, id } = this.props;
@@ -99,7 +106,7 @@ export default class Task extends Component {
         const taskMessage = readOnly
             ? <p> { newText ? newText : taskText } </p>
             : <input
-                // readOnly = { readOnly } А если изменять этот атрибут, тогда код красивее будет)
+                // readOnly = { readOnly } А если редактирование включать через атрибут readOnly, тогда можно не заменять <input/> на <p/>. Я думаю такой код красивее будет)
                 type = 'text'
                 value = { newText ? newText : taskText }
                 onChange = { this._handleInputType }
