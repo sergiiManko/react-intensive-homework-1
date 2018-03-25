@@ -190,7 +190,7 @@ export default class Scheduler extends Component {
                             color2 = { secondColor }
                             onClick = { this._handleDoneAll }
                         />
-                        <code>Выполнить все задачи</code>
+                        <code>Все задачи выполнены</code>
                     </footer>
                 </main>
             </div>
