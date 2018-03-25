@@ -11,8 +11,8 @@ import { string } from 'prop-types';
 
 export default class Scheduler extends Component {
     static contextTypes = {
-        firstColor:  string.isRequired,
         secondColor: string.isRequired,
+        thirdColor:  string.isRequired,
     };
 
     state = {
@@ -93,7 +93,7 @@ export default class Scheduler extends Component {
 
 
     render () {
-        const { firstColor, secondColor } = this.context;
+        const { thirdColor, secondColor } = this.context;
         const { tasks: tasksData, taskText } = this.state;
 
         const tasksFavorite = tasksData.filter((task) => task.isFavorite && !task.isDone).map(this.taskRender);
@@ -120,7 +120,7 @@ export default class Scheduler extends Component {
                     </section>
                     <footer>
                         <Checkbox
-                            color1 = { firstColor }
+                            color1 = { thirdColor }
                             color2 = { secondColor }
                         />
                         <code>Выполнить все задачи</code>
