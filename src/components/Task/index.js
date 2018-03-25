@@ -15,22 +15,14 @@ export default class Task extends Component {
     static propTypes = {
         isFavorite:  bool.isRequired,
         setFavorite: func.isRequired,
-        sort:        func.isRequired,
         taskText:    string.isRequired,
         updateText:  func.isRequired,
     };
 
-    componentDidMount () {
-        const { sort, taskText } = this.props;
-
-        sort();
-        this.setState({ text: taskText });
-    }
-
     state = {
-        text:     '',
         readOnly: true,
         done:     false,
+        newText:  '',
     };
 
     _handleFavorite = () => {
@@ -49,13 +41,13 @@ export default class Task extends Component {
 
     _handleEdit = () => {
         const { updateText, id } = this.props;
-        const { readOnly, done, text } = this.state;
+        const { readOnly, done, newText } = this.state;
 
         if (readOnly && !done) {
-            this.setState({ readOnly: false, oldText: text });
+            this.setState({ readOnly: false, oldText: newText });
         } else {
-            this.setState({ readOnly: true, oldText: text });
-            updateText(id, text);
+            this.setState({ readOnly: true, oldText: newText });
+            updateText(id, newText);
         }
     };
 
@@ -63,7 +55,7 @@ export default class Task extends Component {
         const { value } = e.target;
 
         if (value.length <= 46) {
-            this.setState({ text: value });
+            this.setState({ newText: value });
         }
     };
 
@@ -72,7 +64,7 @@ export default class Task extends Component {
 
         if (e.keyCode === 27 && !readOnly) {
             this.setState({
-                text: oldText,
+                newText:  oldText,
                 readOnly: true,
             });
         }
@@ -83,8 +75,8 @@ export default class Task extends Component {
         let className;
         const firstColor = '#3b8ef3';
 
-        const { isFavorite } = this.props;
-        const { done, readOnly, text } = this.state;
+        const { isFavorite, taskText } = this.props;
+        const { done, readOnly, newText } = this.state;
 
         done === true
             ? className = `${Style.task} ${Style.completed}`
@@ -102,7 +94,7 @@ export default class Task extends Component {
                     <input
                         readOnly = { readOnly }
                         type = 'text'
-                        value = { text }
+                        value = { newText ? newText : taskText }
                         onChange = { this._handleInputType }
                         onKeyDown = { this._handleInputKeyPress }
                     />

@@ -36,15 +36,13 @@ export default class Scheduler extends Component {
     _setFavorite = (id) => {
         const { tasks } = this.state;
 
-        tasks.map((task) => {
+        this.setState(tasks.map((task) => {
             if (task.id === id) {
                 task.isFavorite
                     ? task.isFavorite = false
                     : task.isFavorite = true;
             }
-        });
-
-        this.sort();
+        }));
     };
 
     _updateText = (id, newText) => {
@@ -57,27 +55,22 @@ export default class Scheduler extends Component {
         });
     };
 
-    sort = () => {
-        const { tasks } = this.state;
-
-        this.setState(tasks.sort((a, b) => {
-            return a.isFavorite < b.isFavorite;
-        }));
-
-    };
+    taskRender = (task) => (
+        <Task
+            key = { task.id }
+            setFavorite = { this._setFavorite }
+            updateText = { this._updateText }
+            { ...task }
+        />
+    );
 
 
     render () {
         const { tasks: tasksData, taskText } = this.state;
-        const tasks = tasksData.map((task) => (
-            <Task
-                key = { task.id }
-                setFavorite = { this._setFavorite }
-                updateText = { this._updateText }
-                sort = { this.sort }
-                { ...task }
-            />
-        ));
+
+
+        const tasksFavorite = tasksData.filter((task) => task.isFavorite).map(this.taskRender);
+        const tasks = tasksData.filter((task) => !task.isFavorite).map(this.taskRender);
 
         return (
             <div className = { Style.scheduler }>
@@ -92,6 +85,7 @@ export default class Scheduler extends Component {
                             <button type = 'Send'>Добавить задачу</button>
                         </form>
                         <ul>
+                            { tasksFavorite }
                             { tasks }
                         </ul>
                     </section>
