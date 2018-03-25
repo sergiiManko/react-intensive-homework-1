@@ -47,6 +47,16 @@ export default class Scheduler extends Component {
         this.sort();
     };
 
+    _updateText = (id, newText) => {
+        const { tasks } = this.state;
+
+        tasks.map((task) => {
+            if (task.id === id) {
+                task.taskText = newText;
+            }
+        });
+    };
+
     sort = () => {
         const { tasks } = this.state;
 
@@ -63,6 +73,7 @@ export default class Scheduler extends Component {
             <Task
                 key = { task.id }
                 setFavorite = { this._setFavorite }
+                updateText = { this._updateText }
                 sort = { this.sort }
                 { ...task }
             />

@@ -17,6 +17,7 @@ export default class Task extends Component {
         setFavorite: func.isRequired,
         sort:        func.isRequired,
         taskText:    string.isRequired,
+        updateText:  func.isRequired,
     };
 
     componentDidMount () {
@@ -47,11 +48,15 @@ export default class Task extends Component {
     };
 
     _handleEdit = () => {
+        const { updateText, id } = this.props;
         const { readOnly, done, text } = this.state;
 
-        readOnly && !done
-            ? this.setState({ readOnly: false, oldText: text })
-            : this.setState({ readOnly: true, oldText: text });
+        if (readOnly && !done) {
+            this.setState({ readOnly: false, oldText: text });
+        } else {
+            this.setState({ readOnly: true, oldText: text });
+            updateText(id, text);
+        }
     };
 
     _handleInputType = (e) => {
@@ -66,9 +71,9 @@ export default class Task extends Component {
         const { oldText, readOnly } = this.state;
 
         if (e.keyCode === 27 && !readOnly) {
-            this._handleEdit();
             this.setState({
                 text: oldText,
+                readOnly: true,
             });
         }
     };
