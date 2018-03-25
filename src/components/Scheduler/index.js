@@ -16,9 +16,16 @@ export default class Scheduler extends Component {
     };
 
     state = {
-        doneAll:  false,
-        taskText: '',
-        tasks:    [],
+        searchText: '',
+        doneAll:    false,
+        taskText:   '',
+        tasks:      [
+            { id: 0, taskText: 'Успешно пройти React-интенсив компании Lectrum', isFavorite: false, isDone: true },
+            { id: 1, taskText: 'Взять автограф у Джареда Лето', isFavorite: false, isDone: false },
+            { id: 2, taskText: 'Зарегистрировать бабушку в Твиче', isFavorite: false, isDone: false },
+            { id: 3, taskText: 'Записать собаку на груминг', isFavorite: false, isDone: false },
+            { id: 4, taskText: 'Научиться играть на барабанах', isFavorite: false, isDone: false }
+        ],
     };
 
     _onSchedulerType = ({ target: { value }}) => {
@@ -92,6 +99,10 @@ export default class Scheduler extends Component {
         this.setState(tasks.map((task) => task.isDone = true));
     };
 
+    _taskSearch = (e) => {
+        this.setState({ searchText: e.target.value });
+    };
+
 
     taskRender = (task) => (
         <Task
@@ -104,21 +115,35 @@ export default class Scheduler extends Component {
         />
     );
 
-
     render () {
         const { thirdColor, secondColor } = this.context;
-        const { tasks: tasksData, taskText, doneAll } = this.state;
+        const { tasks: tasksData, taskText, doneAll, searchText } = this.state;
 
-        const tasksFavorite = tasksData.filter((task) => task.isFavorite && !task.isDone).map(this.taskRender);
-        const tasks = tasksData.filter((task) => !task.isFavorite && !task.isDone).map(this.taskRender);
-        const tasksDone = tasksData.filter((task) => task.isDone).map(this.taskRender);
+        const tasksFavorite = tasksData
+            .filter((task) => task.isFavorite && !task.isDone)
+            .filter((task) => task.taskText.match(searchText))
+            .map(this.taskRender);
+
+        const tasks = tasksData
+            .filter((task) => !task.isFavorite && !task.isDone)
+            .filter((task) => task.taskText.match(searchText))
+            .map(this.taskRender);
+
+        const tasksDone = tasksData
+            .filter((task) => task.isDone)
+            .filter((task) => task.taskText.match(searchText))
+            .map(this.taskRender);
 
         return (
             <div className = { Style.scheduler }>
                 <main>
                     <header>
                         <h1>Планировщик задач</h1>
-                        <input placeholder = 'Поиск...' type = 'text' />
+                        <input
+                            placeholder = 'Поиск...'
+                            type = 'text'
+                            onKeyUp = { this._taskSearch }
+                        />
                     </header>
                     <section>
                         <form onSubmit = { this._sendTask }>
