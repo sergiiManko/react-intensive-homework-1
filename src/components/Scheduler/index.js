@@ -16,6 +16,7 @@ export default class Scheduler extends Component {
     };
 
     state = {
+        doneAll:  false,
         taskText: '',
         tasks:    [],
     };
@@ -80,6 +81,20 @@ export default class Scheduler extends Component {
         });
     };
 
+    _handleDoneAll = () => {
+        const { tasks, doneAll } = this.state;
+
+
+        doneAll
+            ? this.setState({ doneAll: false })
+            : this.setState({ doneAll: true });
+
+        this.setState(tasks.map((task) => {
+            task.isDone = true;
+        }));
+    };
+
+
     taskRender = (task) => (
         <Task
             deleteTask = { this._deleteTask }
@@ -94,7 +109,7 @@ export default class Scheduler extends Component {
 
     render () {
         const { thirdColor, secondColor } = this.context;
-        const { tasks: tasksData, taskText } = this.state;
+        const { tasks: tasksData, taskText, doneAll } = this.state;
 
         const tasksFavorite = tasksData.filter((task) => task.isFavorite && !task.isDone).map(this.taskRender);
         const tasks = tasksData.filter((task) => !task.isFavorite && !task.isDone).map(this.taskRender);
@@ -120,8 +135,10 @@ export default class Scheduler extends Component {
                     </section>
                     <footer>
                         <Checkbox
+                            checked = { doneAll }
                             color1 = { thirdColor }
                             color2 = { secondColor }
+                            onClick = { this._handleDoneAll }
                         />
                         <code>Выполнить все задачи</code>
                     </footer>
