@@ -13,6 +13,7 @@ import StartIcon from '../../theme/assets/Star';
 
 export default class Task extends Component {
     static propTypes = {
+        deleteTask:  func.isRequired,
         isDone:      bool.isRequired,
         isFavorite:  bool.isRequired,
         setDone:     func.isRequired,
@@ -37,6 +38,12 @@ export default class Task extends Component {
         const { setDone, id } = this.props;
 
         setDone(id);
+    };
+
+    _handleDelete = () => {
+        const { deleteTask, id } = this.props;
+
+        deleteTask(id);
     };
 
     _handleEdit = () => {
@@ -104,7 +111,10 @@ export default class Task extends Component {
                         color1 = { firstColor }
                         onClick = { this._handleEdit }
                     />
-                    <DeleteIcon color1 = { firstColor } />
+                    <DeleteIcon
+                        color1 = { firstColor }
+                        onClick = { this._handleDelete }
+                    />
                 </div>
             </li>
         );

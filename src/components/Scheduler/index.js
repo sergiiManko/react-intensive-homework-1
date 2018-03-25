@@ -57,6 +57,16 @@ export default class Scheduler extends Component {
         }));
     };
 
+    _deleteTask = (id) => {
+        const { tasks } = this.state;
+
+        tasks.map((task) => {
+            if (task.id === id) {
+                console.log(task)
+            }
+        });
+    };
+
     _updateText = (id, newText) => {
         const { tasks } = this.state;
 
@@ -70,8 +80,9 @@ export default class Scheduler extends Component {
     taskRender = (task) => (
         <Task
             key = { task.id }
-            setFavorite = { this._setFavorite }
             setDone = { this._setDone }
+            setFavorite = { this._setFavorite }
+            deleteTask = { this._deleteTask }
             updateText = { this._updateText }
             { ...task }
         />
@@ -81,7 +92,7 @@ export default class Scheduler extends Component {
     render () {
         const { tasks: tasksData, taskText } = this.state;
 
-        const tasksFavorite = tasksData.filter((task) => task.isFavorite).map(this.taskRender);
+        const tasksFavorite = tasksData.filter((task) => task.isFavorite && !task.isDone).map(this.taskRender);
         const tasks = tasksData.filter((task) => !task.isFavorite && !task.isDone).map(this.taskRender);
         const tasksDone = tasksData.filter((task) => task.isDone).map(this.taskRender);
 
