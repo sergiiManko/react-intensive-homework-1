@@ -5,9 +5,16 @@ import React, { Component } from 'react';
 import Style from './styles.scss';
 
 //Instrumental
+import Checkbox from '../../theme/assets/Checkbox';
 import Task from '../Task/';
+import { string } from 'prop-types';
 
 export default class Scheduler extends Component {
+    static contextTypes = {
+        firstColor:  string.isRequired,
+        secondColor: string.isRequired,
+    };
+
     state = {
         taskText: '',
         tasks:    [],
@@ -75,10 +82,10 @@ export default class Scheduler extends Component {
 
     taskRender = (task) => (
         <Task
+            deleteTask = { this._deleteTask }
             key = { task.id }
             setDone = { this._setDone }
             setFavorite = { this._setFavorite }
-            deleteTask = { this._deleteTask }
             updateText = { this._updateText }
             { ...task }
         />
@@ -86,6 +93,7 @@ export default class Scheduler extends Component {
 
 
     render () {
+        const { firstColor, secondColor } = this.context;
         const { tasks: tasksData, taskText } = this.state;
 
         const tasksFavorite = tasksData.filter((task) => task.isFavorite && !task.isDone).map(this.taskRender);
@@ -110,6 +118,13 @@ export default class Scheduler extends Component {
                             { tasksDone }
                         </ul>
                     </section>
+                    <footer>
+                        <Checkbox
+                            color1 = { firstColor }
+                            color2 = { secondColor }
+                        />
+                        <code>Выполнить все задачи</code>
+                    </footer>
                 </main>
             </div>
         );

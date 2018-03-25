@@ -22,6 +22,11 @@ export default class Task extends Component {
         updateText:  func.isRequired,
     };
 
+    static contextTypes = {
+        firstColor:  string.isRequired,
+        secondColor: string.isRequired,
+    };
+
     state = {
         readOnly: true,
         done:     false,
@@ -79,8 +84,8 @@ export default class Task extends Component {
 
 
     render () {
-        const firstColor = '#3b8ef3';
 
+        const { firstColor, secondColor } = this.context;
         const { isFavorite, isDone, taskText } = this.props;
         const { readOnly, newText } = this.state;
 
@@ -90,7 +95,7 @@ export default class Task extends Component {
                     <Checkbox
                         checked = { isDone }
                         color1 = { firstColor }
-                        color2 = '#fff'
+                        color2 = { secondColor }
                         onClick = { this._handleDone }
                     />
                     <input
