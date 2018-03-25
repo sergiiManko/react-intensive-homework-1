@@ -25,19 +25,6 @@ export default class Scheduler extends Component {
             { id: 4, taskText: 'Научиться играть на барабанах', isFavorite: false, isDone: false }
         ],
     };
-
-    _localStorageApi = () => {
-        const { searchText, doneAll, tasks } = this.state;
-
-        localStorage.setItem('searchText', searchText);
-        localStorage.setItem('doneAll', JSON.stringify(doneAll));
-        localStorage.setItem('tasks', JSON.stringify(tasks));
-
-    };
-
-    componentDidUpdate () {
-        this._localStorageApi();
-    }
     componentWillMount () {
         const localSearchText = localStorage.getItem('searchText');
         const localDoneAll = JSON.parse(localStorage.getItem('doneAll'));
@@ -54,6 +41,20 @@ export default class Scheduler extends Component {
             });
         }
     }
+
+    componentDidUpdate () {
+        this._localStorageApi();
+    }
+
+
+    _localStorageApi = () => {
+        const { searchText, doneAll, tasks } = this.state;
+
+        localStorage.setItem('searchText', searchText);
+        localStorage.setItem('doneAll', JSON.stringify(doneAll));
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+
+    };
 
     _onSchedulerType = ({ target: { value }}) => {
         if (value.length <= 46) {
