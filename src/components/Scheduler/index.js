@@ -118,12 +118,13 @@ export default class Scheduler extends Component {
     _handleDoneAll = () => {
         const { tasks, doneAll } = this.state;
 
+        if (doneAll) {
+            this.setState({ doneAll: false });
+        } else {
+            this.setState({ doneAll: true });
+            this.setState(tasks.map((task) => task.isDone = true));
+        }
 
-        doneAll
-            ? this.setState({ doneAll: false })
-            : this.setState({ doneAll: true });
-
-        this.setState(tasks.map((task) => task.isDone = true));
     };
 
     _taskSearch = (e) => {
