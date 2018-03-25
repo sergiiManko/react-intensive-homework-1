@@ -28,7 +28,7 @@ export default class Scheduler extends Component {
         if (this.state.taskText) {
             this.setState(({ tasks }) => ({
                 taskText: '',
-                tasks:    [{ id: Math.random(), taskText, isFavorite: false }, ...tasks],
+                tasks:    [{ id: Math.random(), taskText, isFavorite: false, isDone: false }, ...tasks],
             }));
         }
     };
@@ -41,6 +41,18 @@ export default class Scheduler extends Component {
                 task.isFavorite
                     ? task.isFavorite = false
                     : task.isFavorite = true;
+            }
+        }));
+    };
+
+    _setDone = (id) => {
+        const { tasks } = this.state;
+
+        this.setState(tasks.map((task) => {
+            if (task.id === id) {
+                task.isDone
+                    ? task.isDone = false
+                    : task.isDone = true;
             }
         }));
     };
@@ -59,6 +71,7 @@ export default class Scheduler extends Component {
         <Task
             key = { task.id }
             setFavorite = { this._setFavorite }
+            setDone = { this._setDone }
             updateText = { this._updateText }
             { ...task }
         />
@@ -68,9 +81,9 @@ export default class Scheduler extends Component {
     render () {
         const { tasks: tasksData, taskText } = this.state;
 
-
         const tasksFavorite = tasksData.filter((task) => task.isFavorite).map(this.taskRender);
-        const tasks = tasksData.filter((task) => !task.isFavorite).map(this.taskRender);
+        const tasks = tasksData.filter((task) => !task.isFavorite && !task.isDone).map(this.taskRender);
+        const tasksDone = tasksData.filter((task) => task.isDone).map(this.taskRender);
 
         return (
             <div className = { Style.scheduler }>
@@ -87,6 +100,7 @@ export default class Scheduler extends Component {
                         <ul>
                             { tasksFavorite }
                             { tasks }
+                            { tasksDone }
                         </ul>
                     </section>
                 </main>

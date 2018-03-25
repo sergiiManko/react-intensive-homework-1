@@ -13,7 +13,9 @@ import StartIcon from '../../theme/assets/Star';
 
 export default class Task extends Component {
     static propTypes = {
+        isDone:      bool.isRequired,
         isFavorite:  bool.isRequired,
+        setDone:     func.isRequired,
         setFavorite: func.isRequired,
         taskText:    string.isRequired,
         updateText:  func.isRequired,
@@ -32,11 +34,9 @@ export default class Task extends Component {
     };
 
     _handleDone = () => {
-        const { done } = this.state;
+        const { setDone, id } = this.props;
 
-        done
-            ? this.setState({ done: false })
-            : this.setState({ done: true, readOnly: true });
+        setDone(id);
     };
 
     _handleEdit = () => {
@@ -72,21 +72,16 @@ export default class Task extends Component {
 
 
     render () {
-        let className;
         const firstColor = '#3b8ef3';
 
-        const { isFavorite, taskText } = this.props;
-        const { done, readOnly, newText } = this.state;
-
-        done === true
-            ? className = `${Style.task} ${Style.completed}`
-            : className = `${Style.task}`;
+        const { isFavorite, isDone, taskText } = this.props;
+        const { readOnly, newText } = this.state;
 
         return (
-            <li className = { className }>
+            <li className = { isDone ? `${Style.task} ${Style.completed}` : `${Style.task}` }>
                 <div>
                     <Checkbox
-                        checked = { done }
+                        checked = { isDone }
                         color1 = { firstColor }
                         color2 = '#fff'
                         onClick = { this._handleDone }
