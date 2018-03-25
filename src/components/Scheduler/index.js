@@ -89,9 +89,7 @@ export default class Scheduler extends Component {
             ? this.setState({ doneAll: false })
             : this.setState({ doneAll: true });
 
-        this.setState(tasks.map((task) => {
-            task.isDone = true;
-        }));
+        this.setState(tasks.map((task) => task.isDone = true));
     };
 
 
