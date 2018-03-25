@@ -23,7 +23,7 @@ export default class Task extends Component {
         updateText:      func.isRequired,
     };
 
-    componentWillUpdate() {
+    componentWillUpdate () {
         const { localStorageApi } = this.props;
 
         localStorageApi();
@@ -96,6 +96,16 @@ export default class Task extends Component {
         const { isFavorite, isDone, taskText } = this.props;
         const { readOnly, newText } = this.state;
 
+        const taskMessage = readOnly
+            ? <p> { newText ? newText : taskText } </p>
+            : <input
+                // readOnly = { readOnly } А если изменять этот атрибут, тогда код красивее будет)
+                type = 'text'
+                value = { newText ? newText : taskText }
+                onChange = { this._handleInputType }
+                onKeyDown = { this._handleInputKeyPress }
+            />;
+
         return (
             <li className = { isDone ? `${Style.task} ${Style.completed}` : `${Style.task}` }>
                 <div>
@@ -105,13 +115,7 @@ export default class Task extends Component {
                         color2 = { secondColor }
                         onClick = { this._handleDone }
                     />
-                    <input
-                        readOnly = { readOnly }
-                        type = 'text'
-                        value = { newText ? newText : taskText }
-                        onChange = { this._handleInputType }
-                        onKeyDown = { this._handleInputKeyPress }
-                    />
+                    { taskMessage }
                 </div>
                 <div>
                     <StartIcon
