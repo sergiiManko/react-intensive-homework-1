@@ -16,10 +16,8 @@ export default class Scheduler extends Component {
     };
 
     state = {
-        searchText: '',
-        doneAll:    false,
-        taskText:   '',
-        tasks:      [
+        taskText: '',
+        tasks:    [
             { id: 0, taskText: 'Успешно пройти React-интенсив компании Lectrum', isFavorite: false, isDone: true },
             { id: 1, taskText: 'Взять автограф у Джареда Лето', isFavorite: false, isDone: false },
             { id: 2, taskText: 'Зарегистрировать бабушку в Твиче', isFavorite: false, isDone: false },
@@ -27,6 +25,35 @@ export default class Scheduler extends Component {
             { id: 4, taskText: 'Научиться играть на барабанах', isFavorite: false, isDone: false }
         ],
     };
+
+    _localStorageApi = () => {
+        const { searchText, doneAll, tasks } = this.state;
+
+        localStorage.setItem('searchText', searchText);
+        localStorage.setItem('doneAll', JSON.stringify(doneAll));
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+
+    };
+
+    componentDidUpdate () {
+        this._localStorageApi();
+    }
+    componentWillMount () {
+        const localSearchText = localStorage.getItem('searchText');
+        const localDoneAll = JSON.parse(localStorage.getItem('doneAll'));
+        const localTasks = JSON.parse(localStorage.getItem('tasks'));
+
+        this.setState({
+            searchText: localSearchText ? localSearchText : '',
+            doneAll:    localDoneAll ? localDoneAll : false,
+        });
+
+        if (localTasks) {
+            this.setState({
+                tasks: localTasks,
+            });
+        }
+    }
 
     _onSchedulerType = ({ target: { value }}) => {
         if (value.length <= 46) {
@@ -108,6 +135,7 @@ export default class Scheduler extends Component {
         <Task
             deleteTask = { this._deleteTask }
             key = { task.id }
+            localStorageApi = { this._localStorageApi }
             setDone = { this._setDone }
             setFavorite = { this._setFavorite }
             updateText = { this._updateText }
@@ -139,7 +167,8 @@ export default class Scheduler extends Component {
                         <input
                             placeholder = 'Поиск...'
                             type = 'text'
-                            onKeyUp = { this._taskSearch }
+                            value = { searchText }
+                            onChange = { this._taskSearch }
                         />
                     </header>
                     <section>

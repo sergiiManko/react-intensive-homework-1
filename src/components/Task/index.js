@@ -13,14 +13,21 @@ import StartIcon from '../../theme/assets/Star';
 
 export default class Task extends Component {
     static propTypes = {
-        deleteTask:  func.isRequired,
-        isDone:      bool.isRequired,
-        isFavorite:  bool.isRequired,
-        setDone:     func.isRequired,
-        setFavorite: func.isRequired,
-        taskText:    string.isRequired,
-        updateText:  func.isRequired,
+        deleteTask:      func.isRequired,
+        isDone:          bool.isRequired,
+        isFavorite:      bool.isRequired,
+        localStorageApi: func.isRequired,
+        setDone:         func.isRequired,
+        setFavorite:     func.isRequired,
+        taskText:        string.isRequired,
+        updateText:      func.isRequired,
     };
+
+    componentWillUpdate() {
+        const { localStorageApi } = this.props;
+
+        localStorageApi();
+    }
 
     static contextTypes = {
         firstColor:  string.isRequired,
