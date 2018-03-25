@@ -58,13 +58,9 @@ export default class Scheduler extends Component {
     };
 
     _deleteTask = (id) => {
-        const { tasks } = this.state;
-
-        tasks.map((task) => {
-            if (task.id === id) {
-                console.log(task)
-            }
-        });
+        this.setState(({ tasks }) => ({
+            tasks: tasks.filter((task) => task.id !== id),
+        }));
     };
 
     _updateText = (id, newText) => {
