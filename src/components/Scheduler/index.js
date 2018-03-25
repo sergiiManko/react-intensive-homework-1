@@ -120,18 +120,15 @@ export default class Scheduler extends Component {
         const { tasks: tasksData, taskText, doneAll, searchText } = this.state;
 
         const tasksFavorite = tasksData
-            .filter((task) => task.isFavorite && !task.isDone)
-            .filter((task) => task.taskText.match(searchText))
+            .filter((task) => task.isFavorite && !task.isDone && task.taskText.match(searchText))
             .map(this.taskRender);
 
         const tasks = tasksData
-            .filter((task) => !task.isFavorite && !task.isDone)
-            .filter((task) => task.taskText.match(searchText))
+            .filter((task) => !task.isFavorite && !task.isDone && task.taskText.match(searchText))
             .map(this.taskRender);
 
         const tasksDone = tasksData
-            .filter((task) => task.isDone)
-            .filter((task) => task.taskText.match(searchText))
+            .filter((task) => task.isDone && task.taskText.match(searchText))
             .map(this.taskRender);
 
         return (
