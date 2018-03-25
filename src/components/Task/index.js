@@ -30,12 +30,12 @@ export default class Task extends Component {
 
     state = {
         readOnly: true,
-        done:     false,
         newText:  '',
     };
 
-    componentDidMount () { //Чувствую что можно сделать этот момент лучше, но пока не придумал как)
+    componentWillMount () { //Чувствую, что можно сделать этот момент лучше, но завтра на работу)
         const { taskText } = this.props;
+
         this.setState({
             newText: taskText,
         });
@@ -66,10 +66,10 @@ export default class Task extends Component {
     };
 
     _handleEdit = () => {
-        const { updateText, id } = this.props;
-        const { readOnly, done, newText } = this.state;
+        const { updateText, id, isDone } = this.props;
+        const { readOnly, newText } = this.state;
 
-        if (readOnly && !done) {
+        if (readOnly && !isDone) {
             this.setState({ readOnly: false, oldText: newText });
         } else {
             this.setState({ readOnly: true, oldText: newText });
