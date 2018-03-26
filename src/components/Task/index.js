@@ -64,7 +64,6 @@ export default class Task extends Component {
             this.setState({ readOnly: false, oldText: newText });
         } else {
             this.setState({ readOnly: true, oldText: newText });
-
             updateTask(id, newText, false);
         }
     };

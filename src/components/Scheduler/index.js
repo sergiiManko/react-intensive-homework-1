@@ -200,7 +200,7 @@ export default class Scheduler extends Component {
             this.setState({ doneAll: false });
         } else {
             this.setState({ doneAll: true });
-            this._updateTask(false, false, false, false);
+            this._updateTask(false);
         }
     };
 
