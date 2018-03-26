@@ -81,10 +81,12 @@ export default class Scheduler extends Component {
 
         this.setState(tasks.map((task) => {
             if (task.id === id) {
-                task.isFavorite
+                return task.isFavorite
                     ? task.isFavorite = false
                     : task.isFavorite = true;
             }
+
+            return false;
         }));
     };
 
@@ -93,10 +95,12 @@ export default class Scheduler extends Component {
 
         this.setState(tasks.map((task) => {
             if (task.id === id) {
-                task.isDone
+                return task.isDone
                     ? task.isDone = false
                     : task.isDone = true;
             }
+
+            return false;
         }));
     };
 
@@ -111,8 +115,10 @@ export default class Scheduler extends Component {
 
         tasks.map((task) => {
             if (task.id === id) {
-                task.taskText = newText;
+                return task.taskText = newText;
             }
+
+            return false;
         });
     };
 
