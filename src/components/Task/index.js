@@ -30,7 +30,7 @@ export default class Task extends Component {
 
     state = {
         readOnly: true,
-        newText:  this.props.taskText,
+        newText:  this.props.taskText, //Чувствую, что можно сделать этот момент лучше, но завтра на работу)
     };
 
     componentWillUpdate () {
