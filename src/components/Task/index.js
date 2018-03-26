@@ -18,9 +18,7 @@ export default class Task extends Component {
         favorite:        bool.isRequired,
         localStorageApi: func.isRequired,
         message:         string.isRequired,
-        setDone:         func.isRequired,
-        setFavorite:     func.isRequired,
-        updateText:      func.isRequired,
+        updateTask:      func.isRequired,
     };
 
     static contextTypes = {
@@ -40,15 +38,16 @@ export default class Task extends Component {
     }
 
     _handleFavorite = () => {
-        const { setFavorite, id } = this.props;
+        const { updateTask, id } = this.props;
 
-        setFavorite(id);
+        updateTask(id, false, true, false);
     };
 
     _handleDone = () => {
-        const { setDone, id } = this.props;
+        const { updateTask, id } = this.props;
 
-        setDone(id);
+
+        updateTask(id, false, false, true);
     };
 
     _handleDelete = () => {
@@ -58,14 +57,15 @@ export default class Task extends Component {
     };
 
     _handleEdit = () => {
-        const { updateText, id, completed } = this.props;
+        const { updateTask, id, completed } = this.props;
         const { readOnly, newText } = this.state;
 
         if (readOnly && !completed) {
             this.setState({ readOnly: false, oldText: newText });
         } else {
             this.setState({ readOnly: true, oldText: newText });
-            updateText(id, newText);
+
+            updateTask(id, newText, false);
         }
     };
 

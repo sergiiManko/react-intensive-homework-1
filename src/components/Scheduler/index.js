@@ -144,87 +144,64 @@ export default class Scheduler extends Component {
             });
     };
 
-    _updateText = (id, newText) => {
+
+    _updateTask = (id, newText, favorite, done) => {
         const { tasks } = this.state;
         const { apiLink, token } = this.context;
 
-        // tasks.map((task) => {
-        //     if (task.id === id) {
-        //         return task.message = newText;
-        //     }
-        //
-        //     return false;
-        // });
+        this.setState(tasks.map((task) => {
 
-        tasks.map((task) => {
-            if (task.id === id) {
-                task.message = newText;
+            if (task.id === id) { //Data for update task
+                if (newText) {
+                    task.message = newText;
+                } else if (favorite) {
+                    task.favorite
+                        ? task.favorite = false
+                        : task.favorite = true;
+                } else if (done) {
+                    task.completed
+                        ? task.completed = false
+                        : task.completed = true;
+                }
+            } else if (!newText && !favorite && !done) { //Data for update all
+                task.completed = true;
+            }
 
-                fetch(apiLink, {
-                    method:  'PUT',
-                    headers: {
-                        'Authorization': token,
-                        'Content-Type':  'application/json',
-                    },
-                    body: JSON.stringify([{
-                        'id':        task.id,
-                        'message':   task.message,
-                        'completed': task.completed,
-                        'favorite':  task.favorite,
-                    }]),
+            // update task
+            fetch(apiLink, {
+                method:  'PUT',
+                headers: {
+                    'Authorization': token,
+                    'Content-Type':  'application/json',
+                },
+                body: JSON.stringify([{
+                    'id':        task.id,
+                    'message':   task.message,
+                    'completed': task.completed,
+                    'favorite':  task.favorite,
+                }]),
+            })
+                .then((response) => {
+                    if (response.status !== 200) {
+                        throw new Error('update task error ');
+                    }
                 })
-                    .then((response) => {
-                        if (response.status !== 200) {
-                            throw new Error('UpdateText task error ');
-                        }
-                    })
-                    .catch((error) => {
-                        console.log(error.message);
-                    });
-            }
-
-            return false;
-        });
-    };
-
-    _setFavorite = (id) => {
-        const { tasks } = this.state;
-
-        this.setState(tasks.map((task) => {
-            if (task.id === id) {
-                return task.favorite
-                    ? task.favorite = false
-                    : task.favorite = true;
-            }
-
-            return false;
-        }));
-    };
-
-    _setDone = (id) => {
-        const { tasks } = this.state;
-
-        this.setState(tasks.map((task) => {
-            if (task.id === id) {
-                return task.completed
-                    ? task.completed = false
-                    : task.completed = true;
-            }
-
-            return false;
-        }));
+                .catch((error) => {
+                    console.log(error.message);
+                });
+        }
+        ));
     };
 
     _handleDoneAll = () => {
-        const { tasks, doneAll } = this.state;
+        const { doneAll } = this.state;
 
         if (doneAll) {
             this.setState({ doneAll: false });
         } else {
             this.setState({ doneAll: true });
-            this.setState(tasks.map((task) => task.completed = true));
+            this._updateTask(false, false, false, false);
         }
-
     };
 
     _taskSearch = (e) => {
@@ -237,9 +214,7 @@ export default class Scheduler extends Component {
             deleteTask = { this._deleteTask }
             key = { task.id }
             localStorageApi = { this._localStorageApi }
-            setDone = { this._setDone }
-            setFavorite = { this._setFavorite }
-            updateText = { this._updateText }
+            updateTask = { this._updateTask }
             { ...task }
         />
     );
