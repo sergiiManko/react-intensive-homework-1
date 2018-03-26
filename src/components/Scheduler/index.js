@@ -18,31 +18,24 @@ export default class Scheduler extends Component {
     };
 
     state = {
-        taskText: '',
-        tasks:    [
-            { id: 0, taskText: 'Успешно пройти React-интенсив компании Lectrum', isFavorite: false, isDone: true },
-            { id: 1, taskText: 'Взять автограф у Джареда Лето', isFavorite: false, isDone: false },
-            { id: 2, taskText: 'Зарегистрировать бабушку в Твиче', isFavorite: false, isDone: false },
-            { id: 3, taskText: 'Записать собаку на груминг', isFavorite: false, isDone: false },
-            { id: 4, taskText: 'Научиться играть на барабанах', isFavorite: false, isDone: false }
+        message: '',
+        tasks:   [
+            // { id: 0, message: 'Успешно пройти React-интенсив компании Lectrum', favorite: true, completed: true },
+            // { id: 1, message: 'Взять автограф у Джареда Лето', favorite: false, completed: false },
+            // { id: 2, message: 'Зарегистрировать бабушку в Твиче', favorite: false, completed: false },
+            // { id: 3, message: 'Записать собаку на груминг', favorite: false, completed: false },
+            // { id: 4, message: 'Научиться играть на барабанах', favorite: false, completed: false }
         ],
     };
 
     componentWillMount () {
         const localSearchText = localStorage.getItem('searchText');
         const localDoneAll = JSON.parse(localStorage.getItem('doneAll'));
-        const localTasks = JSON.parse(localStorage.getItem('tasks'));
 
         this.setState({
             searchText: localSearchText ? localSearchText : '',
             doneAll:    localDoneAll ? localDoneAll : false,
         });
-
-        if (localTasks) {
-            this.setState({
-                tasks: localTasks,
-            });
-        }
 
         this._getTasks();
     }
@@ -69,10 +62,9 @@ export default class Scheduler extends Component {
                 return response.json();
             })
             .then(({ data }) => {
-                // this.setState(({ tasks }) => ({
-                //     tasks: [...data, ...tasks],
-                // }));
-                console.log(data)
+                this.setState(({ tasks }) => ({
+                    tasks: [...data, ...tasks],
+                }));
             })
             .catch((error) => {
                 console.log(error.message);
@@ -80,55 +72,119 @@ export default class Scheduler extends Component {
     };
 
     _localStorageApi = () => {
-        const { searchText, doneAll, tasks } = this.state;
+        const { searchText, doneAll } = this.state;
 
         localStorage.setItem('searchText', searchText);
         localStorage.setItem('doneAll', JSON.stringify(doneAll));
-        localStorage.setItem('tasks', JSON.stringify(tasks));
 
     };
 
     _onSchedulerType = ({ target: { value }}) => {
         if (value.length <= 46) {
             this.setState({
-                taskText: value,
+                message: value,
             });
         }
     };
 
     _sendTask = (e) => {
         e.preventDefault();
-        const { taskText } = this.state;
+        const { message } = this.state;
         const { apiLink, token } = this.context;
-        //
-        // if (this.state.taskText) {
-        //     this.setState(({ tasks }) => ({
-        //         taskText: '',
-        //         tasks:    [{ id: Math.random(), taskText, isFavorite: false, isDone: false }, ...tasks],
-        //     }));
-        // }
 
-        fetch(apiLink, {
-            method:  'POST',
+        if (this.state.message) {
+            fetch(apiLink, {
+                method:  'POST',
+                headers: {
+                    'Content-Type':  'application/json',
+                    'Authorization': token,
+                },
+                body: JSON.stringify({ message }),
+            })
+                .then((response) => {
+                    if (response.status !== 200) {
+                        throw new Error('create tasks error');
+                    }
+
+                    return response.json();
+                })
+                .then(({ data }) => {
+                    this.setState(({ tasks }) => ({
+                        message: '',
+                        tasks:   [data, ...tasks],
+                    }));
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                });
+        }
+    };
+
+    _deleteTask = (id) => {
+        const { apiLink, token } = this.context;
+
+        fetch(`${apiLink}/${id}`, {
+            method:  'DELETE',
             headers: {
-                'Content-Type':  'application/json',
                 'Authorization': token,
             },
-            body: JSON.stringify({ 'message': taskText }),
         })
             .then((response) => {
-                if (response.status !== 200) {
-                    throw new Error('create tasks error');
+                if (response.status !== 204) {
+                    throw new Error('Delete task error ');
                 }
-
-                return response.json();
             })
-            .then((data) => {
-                console.log(data);
+            .then(() => {
+                this.setState(({ tasks }) => ({
+                    tasks: tasks.filter((task) => task.id !== id),
+                }));
             })
             .catch((error) => {
                 console.log(error.message);
             });
+    };
+
+    _updateText = (id, newText) => {
+        const { tasks } = this.state;
+        const { apiLink, token } = this.context;
+
+        // tasks.map((task) => {
+        //     if (task.id === id) {
+        //         return task.message = newText;
+        //     }
+        //
+        //     return false;
+        // });
+
+        tasks.map((task) => {
+            if (task.id === id) {
+                task.message = newText;
+
+                fetch(apiLink, {
+                    method:  'PUT',
+                    headers: {
+                        'Authorization': token,
+                        'Content-Type':  'application/json',
+                    },
+                    body: JSON.stringify([{
+                        'id':        task.id,
+                        'message':   task.message,
+                        'completed': task.completed,
+                        'favorite':  task.favorite,
+                    }]),
+                })
+                    .then((response) => {
+                        if (response.status !== 200) {
+                            throw new Error('UpdateText task error ');
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error.message);
+                    });
+            }
+
+            return false;
+        });
     };
 
     _setFavorite = (id) => {
@@ -136,9 +192,9 @@ export default class Scheduler extends Component {
 
         this.setState(tasks.map((task) => {
             if (task.id === id) {
-                return task.isFavorite
-                    ? task.isFavorite = false
-                    : task.isFavorite = true;
+                return task.favorite
+                    ? task.favorite = false
+                    : task.favorite = true;
             }
 
             return false;
@@ -150,31 +206,13 @@ export default class Scheduler extends Component {
 
         this.setState(tasks.map((task) => {
             if (task.id === id) {
-                return task.isDone
-                    ? task.isDone = false
-                    : task.isDone = true;
+                return task.completed
+                    ? task.completed = false
+                    : task.completed = true;
             }
 
             return false;
         }));
-    };
-
-    _deleteTask = (id) => {
-        this.setState(({ tasks }) => ({
-            tasks: tasks.filter((task) => task.id !== id),
-        }));
-    };
-
-    _updateText = (id, newText) => {
-        const { tasks } = this.state;
-
-        tasks.map((task) => {
-            if (task.id === id) {
-                return task.taskText = newText;
-            }
-
-            return false;
-        });
     };
 
     _handleDoneAll = () => {
@@ -184,7 +222,7 @@ export default class Scheduler extends Component {
             this.setState({ doneAll: false });
         } else {
             this.setState({ doneAll: true });
-            this.setState(tasks.map((task) => task.isDone = true));
+            this.setState(tasks.map((task) => task.completed = true));
         }
 
     };
@@ -208,18 +246,18 @@ export default class Scheduler extends Component {
 
     render () {
         const { thirdColor, secondColor } = this.context;
-        const { tasks: tasksData, taskText, doneAll, searchText } = this.state;
+        const { tasks: tasksData, message, doneAll, searchText } = this.state;
 
         const tasksFavorite = tasksData
-            .filter((task) => task.isFavorite && !task.isDone && task.taskText.match(searchText))
+            .filter((task) => task.favorite && !task.completed && task.message.match(searchText))
             .map(this.taskRender);
 
         const tasks = tasksData
-            .filter((task) => !task.isFavorite && !task.isDone && task.taskText.match(searchText))
+            .filter((task) => !task.favorite && !task.completed && task.message.match(searchText))
             .map(this.taskRender);
 
         const tasksDone = tasksData
-            .filter((task) => task.isDone && task.taskText.match(searchText))
+            .filter((task) => task.completed && task.message.match(searchText))
             .map(this.taskRender);
 
         return (
@@ -239,7 +277,7 @@ export default class Scheduler extends Component {
                             <input
                                 placeholder = 'Описание моей новой задачи'
                                 type = 'text'
-                                value = { taskText }
+                                value = { message }
                                 onChange = { this._onSchedulerType }
                             />
                             <button type = 'Send'>Добавить задачу</button>

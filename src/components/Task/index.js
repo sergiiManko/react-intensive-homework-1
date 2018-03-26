@@ -13,13 +13,13 @@ import StartIcon from '../../theme/assets/Star';
 
 export default class Task extends Component {
     static propTypes = {
+        completed:       bool.isRequired,
         deleteTask:      func.isRequired,
-        isDone:          bool.isRequired,
-        isFavorite:      bool.isRequired,
+        favorite:        bool.isRequired,
         localStorageApi: func.isRequired,
+        message:         string.isRequired,
         setDone:         func.isRequired,
         setFavorite:     func.isRequired,
-        taskText:        string.isRequired,
         updateText:      func.isRequired,
     };
 
@@ -30,7 +30,7 @@ export default class Task extends Component {
 
     state = {
         readOnly: true,
-        newText:  this.props.taskText, //Чувствую, что можно сделать этот момент лучше, но завтра на работу)
+        newText:  this.props.message, //Чувствую, что можно сделать этот момент лучше, но завтра на работу)
     };
 
     componentWillUpdate () {
@@ -58,10 +58,10 @@ export default class Task extends Component {
     };
 
     _handleEdit = () => {
-        const { updateText, id, isDone } = this.props;
+        const { updateText, id, completed } = this.props;
         const { readOnly, newText } = this.state;
 
-        if (readOnly && !isDone) {
+        if (readOnly && !completed) {
             this.setState({ readOnly: false, oldText: newText });
         } else {
             this.setState({ readOnly: true, oldText: newText });
@@ -92,24 +92,24 @@ export default class Task extends Component {
     render () {
 
         const { firstColor, secondColor } = this.context;
-        const { isFavorite, isDone, taskText } = this.props;
+        const { favorite, completed, message } = this.props;
         const { readOnly, newText } = this.state;
 
         const taskMessage = readOnly
-            ? <p> { newText ? newText : taskText } </p>
+            ? <p> { newText ? newText : message } </p>
             : <input
                 // readOnly = { readOnly } А если редактирование включать через атрибут readOnly, тогда можно не заменять <input/> на <p/>. Я думаю такой код красивее будет)
                 type = 'text'
-                value = { newText ? newText : taskText }
+                value = { newText ? newText : message }
                 onChange = { this._handleInputType }
                 onKeyDown = { this._handleInputKeyPress }
             />;
 
         return (
-            <li className = { isDone ? `${Style.task} ${Style.completed}` : `${Style.task}` }>
+            <li className = { completed ? `${Style.task} ${Style.completed}` : `${Style.task}` }>
                 <div>
                     <Checkbox
-                        checked = { isDone }
+                        checked = { completed }
                         color1 = { firstColor }
                         color2 = { secondColor }
                         onClick = { this._handleDone }
@@ -118,7 +118,7 @@ export default class Task extends Component {
                 </div>
                 <div>
                     <StartIcon
-                        checked = { isFavorite }
+                        checked = { favorite }
                         color1 = { firstColor }
                         onClick = { this._handleFavorite }
                     />
