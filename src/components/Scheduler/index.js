@@ -25,6 +25,7 @@ export default class Scheduler extends Component {
             { id: 4, taskText: 'Научиться играть на барабанах', isFavorite: false, isDone: false }
         ],
     };
+
     componentWillMount () {
         const localSearchText = localStorage.getItem('searchText');
         const localDoneAll = JSON.parse(localStorage.getItem('doneAll'));
@@ -181,13 +182,18 @@ export default class Scheduler extends Component {
                     </header>
                     <section>
                         <form onSubmit = { this._sendTask }>
-                            <input placeholder = 'Описание моей новой задачи' type = 'text' value = { taskText } onChange = { this._onSchedulerType } />
+                            <input
+                                placeholder = 'Описание моей новой задачи'
+                                type = 'text'
+                                value = { taskText }
+                                onChange = { this._onSchedulerType }
+                            />
                             <button type = 'Send'>Добавить задачу</button>
                         </form>
                         <ul>
-                            { tasksFavorite }
-                            { tasks }
-                            { tasksDone }
+                            {tasksFavorite}
+                            {tasks}
+                            {tasksDone}
                         </ul>
                     </section>
                     <footer>
