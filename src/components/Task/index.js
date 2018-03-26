@@ -30,16 +30,8 @@ export default class Task extends Component {
 
     state = {
         readOnly: true,
-        newText:  '',
+        newText:  this.props.taskText,
     };
-
-    componentWillMount () { //Чувствую, что можно сделать этот момент лучше, но завтра на работу)
-        const { taskText } = this.props;
-
-        this.setState({
-            newText: taskText,
-        });
-    }
 
     componentWillUpdate () {
         const { localStorageApi } = this.props;
