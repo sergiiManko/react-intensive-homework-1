@@ -11,6 +11,8 @@ import { string } from 'prop-types';
 
 export default class Scheduler extends Component {
     static contextTypes = {
+        apiLink:     string.isRequired,
+        token:       string.isRequired,
         secondColor: string.isRequired,
         thirdColor:  string.isRequired,
     };
@@ -41,12 +43,41 @@ export default class Scheduler extends Component {
                 tasks: localTasks,
             });
         }
+
+        this._getTasks();
     }
 
     componentDidUpdate () {
         this._localStorageApi();
     }
 
+    _getTasks = () => {
+        const { apiLink, token } = this.context;
+
+        fetch(apiLink, {
+            method:  'GET',
+            headers: {
+                'Content-Type':  'application/json',
+                'Authorization': token,
+            },
+        })
+            .then((response) => {
+                if (response.status !== 200) {
+                    throw new Error('Get post error');
+                }
+
+                return response.json();
+            })
+            .then(({ data }) => {
+                // this.setState(({ tasks }) => ({
+                //     tasks: [...data, ...tasks],
+                // }));
+                console.log(data)
+            })
+            .catch((error) => {
+                console.log(error.message);
+            });
+    };
 
     _localStorageApi = () => {
         const { searchText, doneAll, tasks } = this.state;
@@ -68,13 +99,36 @@ export default class Scheduler extends Component {
     _sendTask = (e) => {
         e.preventDefault();
         const { taskText } = this.state;
+        const { apiLink, token } = this.context;
+        //
+        // if (this.state.taskText) {
+        //     this.setState(({ tasks }) => ({
+        //         taskText: '',
+        //         tasks:    [{ id: Math.random(), taskText, isFavorite: false, isDone: false }, ...tasks],
+        //     }));
+        // }
 
-        if (this.state.taskText) {
-            this.setState(({ tasks }) => ({
-                taskText: '',
-                tasks:    [{ id: Math.random(), taskText, isFavorite: false, isDone: false }, ...tasks],
-            }));
-        }
+        fetch(apiLink, {
+            method:  'POST',
+            headers: {
+                'Content-Type':  'application/json',
+                'Authorization': token,
+            },
+            body: JSON.stringify({ 'message': taskText }),
+        })
+            .then((response) => {
+                if (response.status !== 200) {
+                    throw new Error('create tasks error');
+                }
+
+                return response.json();
+            })
+            .then((data) => {
+                console.log(data);
+            })
+            .catch((error) => {
+                console.log(error.message);
+            });
     };
 
     _setFavorite = (id) => {
