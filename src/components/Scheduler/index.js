@@ -1,5 +1,6 @@
 //Core
 import React, { Component } from 'react';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 
 //Style
 import Style from './styles.scss';
@@ -216,13 +217,19 @@ export default class Scheduler extends Component {
 
 
     taskRender = (task) => (
-        <Task
-            deleteTask = { this._deleteTask }
+        <CSSTransition
+            classNames = { {
+                enter: Style.enter,
+            } }
             key = { task.id }
-            localStorageApi = { this._localStorageApi }
-            updateTask = { this._updateTask }
-            { ...task }
-        />
+            timeout = { { enter: 2000, exit: false } }>
+            <Task
+                deleteTask = { this._deleteTask }
+                localStorageApi = { this._localStorageApi }
+                updateTask = { this._updateTask }
+                { ...task }
+            />
+        </CSSTransition>
     );
 
     render () {
@@ -264,9 +271,11 @@ export default class Scheduler extends Component {
                             <button type = 'Send'>Добавить задачу</button>
                         </form>
                         <ul>
-                            {tasksFavorite}
-                            {tasks}
-                            {tasksDone}
+                            <TransitionGroup>
+                                {tasksFavorite}
+                                {tasks}
+                                {tasksDone}
+                            </TransitionGroup>
                         </ul>
                     </section>
                     <footer>
