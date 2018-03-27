@@ -146,7 +146,7 @@ export default class Scheduler extends Component {
 
 
     _updateTask = (id, newText, favorite, done) => {
-        const { tasks } = this.state;
+        const { tasks, doneAll } = this.state;
         const { apiLink, token } = this.context;
 
         this.setState(tasks.map((task) => {
@@ -162,6 +162,12 @@ export default class Scheduler extends Component {
                     task.completed
                         ? task.completed = false
                         : task.completed = true;
+
+                    if (!task.completed) { //Off trigger "doneAll", if current task not completed
+                        this.setState({
+                            doneAll: false,
+                        });
+                    }
                 }
             } else if (!newText && !favorite && !done) { //Data for update all
                 task.completed = true;

@@ -46,7 +46,6 @@ export default class Task extends Component {
     _handleDone = () => {
         const { updateTask, id } = this.props;
 
-
         updateTask(id, false, false, true);
     };
 
