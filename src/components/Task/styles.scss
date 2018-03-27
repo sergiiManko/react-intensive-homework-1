@@ -1,61 +1,58 @@
 @import '../../theme/palette';
 
 .task {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 6.1rem;
-    margin: 1.3rem 0;
-    padding: 0 1.8rem;
-    letter-spacing: 0.1rem;
-    background-color: $paletteColor2;
-    border-radius: 0.5rem;
-    box-shadow: 0 0.2rem 0.6rem $rgbaColor1;
-    font-size: 2rem;
-    font-weight: 400;
-    &:first-of-type {
-        margin-top: 0;
-    }
-    &:last-of-type {
-        margin-bottom: 0.6rem;
-    }
-
-    & div span {
-        cursor: pointer;
-    }
-
-    & > div:first-child {
+    .wrapper {
         display: flex;
-        width: 62rem;
+        align-items: center;
+        justify-content: space-between;
+        height: 6.1rem;
+        margin: 1.3rem 0;
+        padding: 0 1.8rem;
+        letter-spacing: 0.1rem;
+        background-color: $paletteColor2;
+        border-radius: 0.5rem;
+        box-shadow: 0 0.2rem 0.6rem $rgbaColor1;
+        font-size: 2rem;
+        font-weight: 400;
+        & div span {
+            cursor: pointer;
+        }
 
-        & span {
+        & > div:first-child {
             display: flex;
-            align-items: center;
-            margin-right: 1.9rem;
+            width: 62rem;
+
+            & span {
+                display: flex;
+                align-items: center;
+                margin-right: 1.9rem;
+            }
+
+            & input {
+                width: 100%;
+                border: 0;
+                &:read-write {
+                    border: 1px solid #000;
+                }
+            }
         }
 
-        & input {
-            width: 100%;
-            border: 0;
-          &:read-write {
-            border: 1px solid #000;
-          }
+        & > div:last-child {
+            display: flex;
+            & span {
+                margin-left: 1.7rem;
+            }
         }
     }
 
-    & > div:last-child {
-        display: flex;
-        & span {
-            margin-left: 1.7rem;
-        }
-    }
 }
 
 .completed {
-    background-color: $paletteColor8;
-    color: $paletteColor9;
-
-    & > div:first-child {
+    .wrapper {
+        background-color: $paletteColor8;
+        color: $paletteColor9;
+        & > div:first-child {
+        }
         & input {
             background-color: $paletteColor8;
         }

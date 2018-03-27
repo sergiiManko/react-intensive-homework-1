@@ -117,29 +117,31 @@ export default class Task extends Component {
 
         return (
             <li className = { completed ? `${Style.task} ${Style.completed}` : `${Style.task}` }>
-                <div>
-                    <Checkbox
-                        checked = { completed }
-                        color1 = { firstColor }
-                        color2 = { secondColor }
-                        onClick = { this._handleDone }
-                    />
-                    { taskMessage }
-                </div>
-                <div>
-                    <StartIcon
-                        checked = { favorite }
-                        color1 = { firstColor }
-                        onClick = { this._handleFavorite }
-                    />
-                    <EditIcon
-                        color1 = { firstColor }
-                        onClick = { this._handleEdit }
-                    />
-                    <DeleteIcon
-                        color1 = { firstColor }
-                        onClick = { this._handleDelete }
-                    />
+                <div className = { Style.wrapper }>
+                    <div>
+                        <Checkbox
+                            checked = { completed }
+                            color1 = { firstColor }
+                            color2 = { secondColor }
+                            onClick = { this._handleDone }
+                        />
+                        { taskMessage }
+                    </div>
+                    <div>
+                        <StartIcon
+                            checked = { favorite }
+                            color1 = { firstColor }
+                            onClick = { this._handleFavorite }
+                        />
+                        <EditIcon
+                            color1 = { firstColor }
+                            onClick = { this._handleEdit }
+                        />
+                        <DeleteIcon
+                            color1 = { firstColor }
+                            onClick = { this._handleDelete }
+                        />
+                    </div>
                 </div>
             </li>
         );
