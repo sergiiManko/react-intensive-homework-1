@@ -57,11 +57,13 @@ export default class Task extends Component {
     };
 
     _handleEdit = () => {
-        const { updateTask, id, completed } = this.props;
+        const { deleteTask, updateTask, id, completed } = this.props;
         const { readOnly, newText } = this.state;
 
         if (readOnly && !completed) {
             this.setState({ readOnly: false, oldText: newText });
+        } else if (!newText) {
+            deleteTask(id);
         } else {
             this.setState({ readOnly: true, oldText: newText });
             updateTask(id, newText, false);
@@ -88,19 +90,28 @@ export default class Task extends Component {
     };
 
 
+    _moveCaretAtEnd (e) { //For autoFocus
+        const tempValue = e.target.value;
+
+        e.target.value = '';
+        e.target.value = tempValue;
+    }
+
     render () {
 
         const { firstColor, secondColor } = this.context;
-        const { favorite, completed, message } = this.props;
+        const { favorite, completed } = this.props;
         const { readOnly, newText } = this.state;
 
         const taskMessage = readOnly
-            ? <p> { newText ? newText : message } </p>
+            ? <p> { newText } </p>
             : <input
                 // readOnly = { readOnly } А если редактирование включать через атрибут readOnly, тогда можно не заменять <input/> на <p/>. Я думаю такой код красивее будет)
+                autoFocus
                 type = 'text'
-                value = { newText ? newText : message }
+                value = { newText }
                 onChange = { this._handleInputType }
+                onFocus = { this._moveCaretAtEnd }
                 onKeyDown = { this._handleInputKeyPress }
             />;
 
