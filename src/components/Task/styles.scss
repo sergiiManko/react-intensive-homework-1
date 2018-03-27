@@ -2,7 +2,6 @@
 
 .task {
     max-width: 790px;
-    height: 7.4rem;
     &:first-of-type .wrapper{
         margin-top: 0;
     }
@@ -14,7 +13,7 @@
         align-items: center;
         justify-content: space-between;
         height: 6.1rem;
-        //margin: 1.3rem 0;
+        margin: 1.3rem 0;
         padding: 0 1.8rem;
         letter-spacing: 0.1rem;
         background-color: $paletteColor2;

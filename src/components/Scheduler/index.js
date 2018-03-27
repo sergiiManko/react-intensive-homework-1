@@ -219,9 +219,10 @@ export default class Scheduler extends Component {
     taskRender = (task) => (
         <CSSTransition
             classNames = { {
-                enter:      Style.enter,
-                exit:       Style.exit,
-                exitActive: Style.exitActive,
+                enter:       Style.enter,
+                enterActive: Style.enterActive,
+                exit:        Style.exit,
+                exitActive:  Style.exitActive,
             } }
             key = { task.id }
             timeout = { { enter: 2000, exit: 500 } }>
