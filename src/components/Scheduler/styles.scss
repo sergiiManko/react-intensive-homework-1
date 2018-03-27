@@ -169,14 +169,14 @@
 
 .enterActive {
     opacity: 1;
-    max-height: 62px;
+    max-height: 74px;
     animation: swing 2s ease;
     transition: opacity .5s ease-in-out, max-height .5s ease-in-out;
 }
 
 .exit {
     opacity: 1;
-    max-height: 62px;
+    max-height: 74px;
     overflow: hidden;
 }
 
