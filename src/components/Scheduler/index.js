@@ -219,10 +219,12 @@ export default class Scheduler extends Component {
     taskRender = (task) => (
         <CSSTransition
             classNames = { {
-                enter: Style.enter,
+                enter:      Style.enter,
+                exit:       Style.exit,
+                exitActive: Style.exitActive,
             } }
             key = { task.id }
-            timeout = { { enter: 2000, exit: false } }>
+            timeout = { { enter: 2000, exit: 500 } }>
             <Task
                 deleteTask = { this._deleteTask }
                 localStorageApi = { this._localStorageApi }

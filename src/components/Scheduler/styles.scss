@@ -130,6 +130,16 @@
 .enter {
   animation: swing 2s ease;
 }
+.exit {
+  opacity: 1;
+  max-height: 62px;
+  overflow: hidden;
+}
+.exitActive {
+  opacity: 0;
+  max-height: 0;
+  transition: opacity .5s ease-in-out, max-height .5s ease-in-out;
+}
 
 @keyframes swing {
   15% {
