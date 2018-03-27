@@ -146,7 +146,7 @@ export default class Scheduler extends Component {
 
 
     _updateTask = (id, newText, favorite, done) => {
-        const { tasks, doneAll } = this.state;
+        const { tasks } = this.state;
         const { apiLink, token } = this.context;
 
         this.setState(tasks.map((task) => {
