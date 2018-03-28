@@ -23,7 +23,7 @@
     }
     @-moz-keyframes AnimationName {
         0% {
-            background-position: 0% 11%
+            background-position: 0 11%
         }
         50% {
             background-position: 100% 90%
@@ -34,7 +34,7 @@
     }
     @keyframes AnimationName {
         0% {
-            background-position: 0% 11%
+            background-position: 0 11%
         }
         50% {
             background-position: 100% 90%
@@ -171,7 +171,8 @@
     opacity: 1;
     max-height: 74px;
     animation: swing 2s ease;
-    transition: opacity .5s ease-in-out, max-height .5s ease-in-out;
+    transition: opacity .5s ease-in-out,
+                max-height .5s ease-in-out;
 }
 
 .exit {
@@ -183,7 +184,8 @@
 .exitActive {
     opacity: 0;
     max-height: 0;
-    transition: opacity .5s ease-in-out, max-height .5s ease-in-out;
+    transition: opacity .5s ease-in-out,
+                max-height .5s ease-in-out;
 }
 
 @keyframes swing {
