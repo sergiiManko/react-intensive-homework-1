@@ -196,6 +196,8 @@ export default class Scheduler extends Component {
                 .catch((error) => {
                     console.log(error.message);
                 });
+
+            return true;
         }
         ));
     };
