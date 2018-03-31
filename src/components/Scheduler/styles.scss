@@ -10,28 +10,6 @@
     background-size: 400% 400%;
     animation: backgroundAnimation 14s ease infinite;
 
-    @-webkit-keyframes backgroundAnimation {
-        0% {
-            background-position: 0 11%
-        }
-        50% {
-            background-position: 100% 90%
-        }
-        100% {
-            background-position: 0 11%
-        }
-    }
-    @-moz-keyframes AnimationName {
-        0% {
-            background-position: 0 11%
-        }
-        50% {
-            background-position: 100% 90%
-        }
-        100% {
-            background-position: 0 11%
-        }
-    }
     @keyframes AnimationName {
         0% {
             background-position: 0 11%
