@@ -28,7 +28,7 @@ export default class Task extends Component {
 
     state = {
         readOnly: true,
-        newText:  this.props.message, //Чувствую, что можно сделать этот момент лучше, но завтра на работу)
+        newText:  this.props.message, //TODO необходимо убирать потенциальные источники возникновения ошибок.
     };
 
     componentWillUpdate () {
@@ -90,7 +90,7 @@ export default class Task extends Component {
     };
 
 
-    _moveCaretAtEnd (e) { //For autoFocus
+    _moveCaretAtEnd (e) {
         const tempValue = e.target.value;
 
         e.target.value = '';
@@ -106,7 +106,6 @@ export default class Task extends Component {
         const taskMessage = readOnly
             ? <p> { newText } </p>
             : <input
-                // readOnly = { readOnly } А если редактирование включать через атрибут readOnly, тогда можно не заменять <input/> на <p/>. Я думаю такой код красивее будет)
                 autoFocus
                 type = 'text'
                 value = { newText }

@@ -20,13 +20,7 @@ export default class Scheduler extends Component {
 
     state = {
         message: '',
-        tasks:   [
-            // { id: 0, message: 'Успешно пройти React-интенсив компании Lectrum', favorite: true, completed: true },
-            // { id: 1, message: 'Взять автограф у Джареда Лето', favorite: false, completed: false },
-            // { id: 2, message: 'Зарегистрировать бабушку в Твиче', favorite: false, completed: false },
-            // { id: 3, message: 'Записать собаку на груминг', favorite: false, completed: false },
-            // { id: 4, message: 'Научиться играть на барабанах', favorite: false, completed: false }
-        ],
+        tasks:   [],
     };
 
     componentWillMount () {
@@ -93,7 +87,7 @@ export default class Scheduler extends Component {
         const { message } = this.state;
         const { apiLink, token } = this.context;
 
-        if (this.state.message) {
+        if (message) {
             fetch(apiLink, {
                 method:  'POST',
                 headers: {
@@ -152,7 +146,7 @@ export default class Scheduler extends Component {
 
         this.setState(tasks.map((task) => {
 
-            if (task.id === id) { //Data for update task
+            if (task.id === id) {
                 if (newText) {
                     task.message = newText;
                 } else if (favorite) {
@@ -164,13 +158,13 @@ export default class Scheduler extends Component {
                         ? task.completed = false
                         : task.completed = true;
 
-                    if (!task.completed) { //Off trigger "doneAll", if current task not completed
+                    if (!task.completed) {
                         this.setState({
                             doneAll: false,
                         });
                     }
                 }
-            } else if (!newText && !favorite && !done) { //Data for update all
+            } else if (!newText && !favorite && !done) {
                 task.completed = true;
             }
 
