@@ -168,7 +168,6 @@ export default class Scheduler extends Component {
                 task.completed = true;
             }
 
-            // update task
             fetch(apiLink, {
                 method:  'PUT',
                 headers: {
